@@ -1,0 +1,51 @@
+{
+  "name": "nu-help-desk-backend",
+  "version": "1.0.0",
+  "description": "Local workspace for the NU Student Help Website MVP",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend,dashboard -c blue,green,magenta \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:dashboard\"",
+    "dev:backend": "tsx watch src/server.ts",
+    "dev:frontend": "npm run dev --prefix nu-help-desk-frontend",
+    "dev:dashboard": "npm run dev --prefix nu-help-desk-dashboard",
+    "install:all": "npm install && pnpm install --dir nu-help-desk-frontend && npm install --prefix nu-help-desk-dashboard",
+    "build:all": "npm run build && npm run build --prefix nu-help-desk-frontend && npm run build --prefix nu-help-desk-dashboard",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "seed": "tsx src/scripts/seed.ts",
+    "clean": "find . \\( -name node_modules -o -name .next -o -name dist -o -name build \\) -prune -exec rm -rf {} +"
+  },
+  "keywords": [
+    "express",
+    "typescript",
+    "mongodb",
+    "mongoose",
+    "jwt"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.3",
+    "multer": "^2.2.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.3.0",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
