@@ -7,19 +7,34 @@ type ValidationSchemas = {
   params?: ZodTypeAny;
 };
 
+const replaceObjectValues = (target: Record<string, unknown>, source: Record<string, unknown>) => {
+  for (const key of Object.keys(target)) {
+    delete target[key];
+  }
+
+  Object.assign(target, source);
+};
+
 export const validateRequest =
   (schemas: ValidationSchemas) =>
   (req: Request, _res: Response, next: NextFunction): void => {
     if (schemas.body) {
-      req.body = schemas.body.parse(req.body) as Request["body"];
+      const parsedBody = schemas.body.parse(req.body) as Record<string, unknown>;
+      if (req.body && typeof req.body === "object") {
+        replaceObjectValues(req.body as Record<string, unknown>, parsedBody);
+      } else {
+        req.body = parsedBody as Request["body"];
+      }
     }
 
     if (schemas.query) {
-      req.query = schemas.query.parse(req.query) as Request["query"];
+      const parsedQuery = schemas.query.parse(req.query) as Record<string, unknown>;
+      replaceObjectValues(req.query as Record<string, unknown>, parsedQuery);
     }
 
     if (schemas.params) {
-      req.params = schemas.params.parse(req.params) as Request["params"];
+      const parsedParams = schemas.params.parse(req.params) as Record<string, unknown>;
+      replaceObjectValues(req.params as Record<string, unknown>, parsedParams);
     }
 
     next();
